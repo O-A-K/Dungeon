@@ -9,7 +9,7 @@ public class OK_NavCharacterController : MonoBehaviour
     //Creates a variable for the navmesh agent on the PC and an animator so that we can tie movement to animations.
     private NavMeshAgent navMeshAgent;
     private Vector3 inputValue = Vector3.zero;
-    public float speed = 100;
+    public float speed = 0;
 
     void Awake()
     {
@@ -37,7 +37,6 @@ public class OK_NavCharacterController : MonoBehaviour
 
         if(isValid)
         {
-            print(inputValue);
             if ((transform.position - hit.position).magnitude >= .02f)
             {
                 navMeshAgent.destination = hit.position;
