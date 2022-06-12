@@ -10,17 +10,14 @@ public class OK_NavCharacterController : MonoBehaviour
     private NavMeshAgent navMeshAgent;
     private Vector3 inputValue = Vector3.zero;
     public float speed = 0;
+    public Animator animator;
+    public float playerspeed;
 
     void Awake()
     {
         //Grab the navmesh agent and animator attached to this game object
         navMeshAgent = GetComponent<NavMeshAgent>();
-        //animator = GetComponent<Animator>();
-    }
-
-    void OnEnable()
-    {
-
+        animator = GetComponent<Animator>();
     }
     
     // Update is called once per frame
@@ -31,11 +28,14 @@ public class OK_NavCharacterController : MonoBehaviour
 
     void CharMovement()
     {
+        
         Vector3 newPosition = transform.position + inputValue * Time.deltaTime * speed;
         NavMeshHit hit;
         bool isValid = NavMesh.SamplePosition(newPosition, out hit, .3f, NavMesh.AllAreas);
+        playerspeed = (transform.position - hit.position).magnitude;
+        animator.SetFloat("animSpeed", playerspeed);
 
-        if(isValid)
+        if (isValid)
         {
             if ((transform.position - hit.position).magnitude >= .02f)
             {
@@ -43,13 +43,16 @@ public class OK_NavCharacterController : MonoBehaviour
 
             }
         }
+
+        if (playerspeed >= 0.1f)
+        {
+            speed = 120;
+        }
+        else
+        {
+            speed = 80;
+        }
         
-        //Set animator to idle
-        //if (input.magnitude <=0)
-        //{
-        //    animator.SetFloat("Walk", 0f);
-        //    return;
-        //}
     }
 
     public void OnMove(InputAction.CallbackContext context)
